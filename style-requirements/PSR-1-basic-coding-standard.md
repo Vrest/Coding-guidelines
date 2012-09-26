@@ -1,35 +1,49 @@
-Basic Coding Standard
-=====================
-
-This section of the standard comprises what should be considered the standard
-coding elements that are required to ensure a high level of technical
-interoperability between shared PHP code.
+Coding standards and guidelines
+===============================
 
 The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD",
 "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be
 interpreted as described in [RFC 2119][].
 
 [RFC 2119]: http://www.ietf.org/rfc/rfc2119.txt
-[PSR-0]: https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-0.md
+
+
+What you need to know first.
+----------------------------
+PHP as a language does not offer some things developers have come to take for granted in other languages. For some of these things relatively simple workarounds exist:
+
+### Static constructors
+Any code directly after a class declaration is considered the static constructor.
+Unlike for example c#, static constructors are **not** guaranteed to be executed before any other code is executed.
+
+### Properties vs. fields
+A property is conceptually just an attribute of some object that can be inspected or manipulated or both. PHPs properties do not offer the distinction required. From here on. We take on the following connotation:
+
+* php properties SHALL NOT EVER be declared public
+* php properties will henceforth be referred to as "fields" or "backing fields"
+* a property is a piece of API, therefor implemented in methods.
+* properties can be expressed in any combination of getters and setters
+* a setter method name MUST always start with `set`.
+* a getter method name MUST always start with `get` except when the property clearly refers to a boolean value, in which case it MAY also start with `is`, `has`, `wants`, etc.* 
+
+#### Fields
+Fields MUST NOT be declared public.
+
+### Inner Classes
+Since In PHP it is not possible to nest class declarations, but it may still be very useful
 
 
 1. Overview
 -----------
 
 - Files MUST use only `<?php` and `<?=` tags.
-
 - Files MUST use only UTF-8 without BOM for PHP code.
-
 - Files SHOULD *either* declare symbols (classes, functions, constants, etc.)
   *or* cause side-effects (e.g. generate output, change .ini settings, etc.)
-  but SHOULD NOT do both.
-
+  but MUST NOT do both.
 - Namespaces and classes MUST follow [PSR-0][].
-
-- Class names MUST be declared in `StudlyCaps`.
-
-- Class constants MUST be declared in all upper case with underscore separators.
-
+- Class names MUST be declared in `PascalCase`.
+- Class constants SHOULD be declared in all upper case with underscore separators. With an exception for labels in `Enum` subclasses.
 - Method names MUST be declared in `camelCase`.
 
 
@@ -63,7 +77,7 @@ reading from or writing to a file, and so on.
 The following is an example of a file with both declarations and side effects;
 i.e, an example of what to avoid:
 
-```php
+```
 <?php
 // side effect: change ini settings
 ini_set('error_reporting', E_ALL);
@@ -84,7 +98,7 @@ function foo()
 The following example is of a file that contains declarations without side
 effects; i.e., an example of what to emulate:
 
-```php
+```
 <?php
 // declaration
 function foo()
@@ -101,7 +115,6 @@ if (! function_exists('bar')) {
 }
 ```
 
-
 3. Namespace and Class Names
 ----------------------------
 
@@ -110,34 +123,27 @@ Namespaces and classes MUST follow [PSR-0][].
 This means each class is in a file by itself, and is in a namespace of at
 least one level: a top-level vendor name.
 
-Class names MUST be declared in `StudlyCaps`.
+Class names MUST be declared in `PascalCase`.
 
-Code written for PHP 5.3 and after MUST use formal namespaces.
+Code MUST use formal namespaces.
 
 For example:
 
-```php
+```
 <?php
-// PHP 5.3 and later:
-namespace Vendor\Model;
 
-class Foo
+namespace Vendor\Model
 {
+	class Foo
+	{
+	}
 }
+
+#EOF
+
 ```
 
-Code written for 5.2.x and before SHOULD use the pseudo-namespacing convention
-of `Vendor_` prefixes on class names.
-
-```php
-<?php
-// PHP 5.2.x and earlier:
-class Vendor_Model_Foo
-{
-}
-```
-
-4. Class Constants, Properties, and Methods
+4. Class Constants, Fields, and Methods
 -------------------------------------------
 
 The term "class" refers to all classes, interfaces, and traits.
@@ -147,7 +153,7 @@ The term "class" refers to all classes, interfaces, and traits.
 Class constants MUST be declared in all upper case with underscore separators.
 For example:
 
-```php
+```
 <?php
 namespace Vendor\Model;
 
@@ -158,10 +164,10 @@ class Foo
 }
 ```
 
-### 4.2. Properties
+### 4.2. Fields
 
 This guide intentionally avoids any recommendation regarding the use of
-`$StudlyCaps`, `$camelCase`, or `$under_score` property names.
+`$PascalCase`, `$camelCase`, or `$under_score` field names.
 
 Whatever naming convention is used SHOULD be applied consistently within a
 reasonable scope. That scope may be vendor-level, package-level, class-level,
@@ -170,3 +176,5 @@ or method-level.
 ### 4.3. Methods
 
 Method names MUST be declared in `camelCase()`.
+
+
