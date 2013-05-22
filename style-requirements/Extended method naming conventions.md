@@ -35,3 +35,12 @@ Methods prefixed with “try”
   - Should contain event handling code. These methods are considered private API and follow the following set of extra rules whenever possible.
   - Event handlers look like this: on <Control> _ EventName(Object $sender, EventArg $arg) Where <Control> is the PascalCased property name of the control. An example for a control named `txtFirstName` could be `onTxtFirstName_ValueChanged` 
   - Event handlers should have two arguments, one `Object $sender` and one `EventArg $argument`. There is a “hidden” third argument with the name of the event for handlers registered to be fired for multiple events.
+
+## Methods prefixed with "fetch"
+  - Indicate that they grab some data from the database but do not cache it.
+  - Are only allowed to exist in DataAccess classes (`DCPF\DataAccess\...` or derived Business classes)
+
+## Methods prefixed with "getBy<SomeColumnName>"
+  - May only exist on `BaseTable` derived classes.
+  - Must not be static
+  - Must return the default DataAccess record class for the table they are on
