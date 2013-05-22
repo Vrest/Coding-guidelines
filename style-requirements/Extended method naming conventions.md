@@ -40,7 +40,7 @@ Methods prefixed with “try”
   - Indicate that they grab some data from the database but do not cache it.
   - Are only allowed to exist in DataAccess classes (`DCPF\DataAccess\...` or derived Business classes)
 
-## Methods prefixed with "getBy<SomeColumnName>"
+## Methods prefixed with "getBy[SomeColumnName(s)]"
   - May only exist on `BaseTable` derived classes.
   - Must not be static
   - Must return the default DataAccess record class for the table they are on
